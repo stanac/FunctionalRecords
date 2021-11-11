@@ -18,7 +18,7 @@ public class MaybeTests
     [Fact]
     public void DefaultConstructor_SetsValueToNotSet()
     {
-        Maybe<int> i = new Maybe<int>();
+        Maybe<int> i = Maybe<int>.None;
         i.IsNone.Should().BeTrue();
         i.IsSome.Should().BeFalse();
     }
@@ -33,6 +33,28 @@ public class MaybeTests
         s.IsSome.Should().BeFalse();
     }
 
+    [Fact]
+    public void TwoSameMaybeObjects_AreEqual_ReturnsTrue()
+    {
+        Maybe<string> s1 = "123";
+        Maybe<string> s2 = "123";
+
+        (s1 == s2).Should().BeTrue();
+    }
+
+    [Fact]
+    public void ValueSet_ToString_DoesNotThrowException()
+    {
+        string s = Maybe<int>.From(1).ToString();
+        s.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ValueNotSet_ToString_DoesNotThrowException()
+    {
+        string s = Maybe<int>.None.ToString();
+        s.Should().NotBeNull();
+    }
 
     [Fact]
     public void MaybeNotSet_IsNone_ReturnsTrue()
@@ -101,9 +123,9 @@ public class MaybeTests
 
         int value = -2;
 
-        s.Execute(
-            whenSet: new Action<string>(sArg => value = sArg.Length),
-            whenNotSet: new Action(() => value = -1)
+        s.Match(
+            some: new Action<string>(sArg => value = sArg.Length),
+            none: new Action(() => value = -1)
         );
 
         value.Should().Be(-1);
@@ -116,9 +138,9 @@ public class MaybeTests
 
         int value = -2;
 
-        s.Execute(
-            whenSet: new Action<string>(s => value = s.Length),
-            whenNotSet: new Action(() => value = -1)
+        s.Match(
+            some: new Action<string>(s => value = s.Length),
+            none: new Action(() => value = -1)
         );
 
         value.Should().Be(4);
@@ -129,9 +151,9 @@ public class MaybeTests
     {
         Maybe<string> s = null;
 
-        int value = s.Execute(
-            whenSet: sArg => sArg.Length,
-            whenNotSet: () => -1
+        int value = s.Match(
+            some: sArg => sArg.Length,
+            none: () => -1
         );
 
         value.Should().Be(-1);
@@ -142,9 +164,9 @@ public class MaybeTests
     {
         Maybe<string> s = "1234";
 
-        int value = s.Execute(
-            whenSet: sArg => sArg.Length,
-            whenNotSet: () => -1
+        int value = s.Match(
+            some: sArg => sArg.Length,
+            none: () => -1
         );
 
         value.Should().Be(4);
@@ -157,8 +179,8 @@ public class MaybeTests
 
         int value = -2;
 
-        s.Execute(
-            whenSet: new Action<string>(sArg => value = sArg.Length)
+        s.Match(
+            some: new Action<string>(sArg => value = sArg.Length)
         );
 
         value.Should().Be(-2);
@@ -171,8 +193,8 @@ public class MaybeTests
 
         int value = -2;
 
-        s.Execute(
-            whenNotSet: new Action(() => value = 3)
+        s.Match(
+            none: new Action(() => value = 3)
         );
 
         value.Should().Be(3);
@@ -185,8 +207,8 @@ public class MaybeTests
 
         int value = -2;
 
-        s.Execute(
-            whenSet: new Action<string>(s => value = s.Length)
+        s.Match(
+            some: new Action<string>(s => value = s.Length)
         );
 
         value.Should().Be(4);
@@ -199,8 +221,8 @@ public class MaybeTests
 
         int value = -2;
 
-        s.Execute(
-            whenNotSet: new Action(() => value = -3)
+        s.Match(
+            none: new Action(() => value = -3)
         );
 
         value.Should().Be(-2);
@@ -211,13 +233,13 @@ public class MaybeTests
     {
         Maybe<string> s = "1234";
 
-        int value = await s.Execute(
-            whenSet: async (sArg) =>
+        int value = await s.Match(
+            some: async (sArg) =>
             {
                 await Task.Delay(0);
                 return sArg.Length;
             },
-            whenNotSet: async () =>
+            none: async () =>
             {
                 await Task.Delay(0);
                 return -2;
@@ -232,13 +254,13 @@ public class MaybeTests
     {
         Maybe<string> s = Maybe<string>.None;
 
-        int value = await s.Execute(
-            whenSet: async (sArg) =>
+        int value = await s.Match(
+            some: async (sArg) =>
             {
                 await Task.Delay(0);
                 return sArg.Length;
             },
-            whenNotSet: async () =>
+            none: async () =>
             {
                 await Task.Delay(0);
                 return -2;

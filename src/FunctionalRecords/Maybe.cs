@@ -39,6 +39,7 @@ public readonly record struct Maybe<T>
         }
     }
 
+    [Obsolete("Use Maybe<T>.None or Maybe<T>.From(...)")]
     public Maybe()
     {
         IsSome = false;
@@ -53,64 +54,76 @@ public readonly record struct Maybe<T>
         _setToNull = value == null;
     }
 
-    public static Maybe<T> None => new Maybe<T>();
+#pragma warning disable CS0618 // Type or member is obsolete
+    public static Maybe<T> None => new();
+#pragma warning restore CS0618 // Type or member is obsolete
 
     public static Maybe<T> From(T value) => new(value);
 
     public static implicit operator Maybe<T>(T value) => new(value);
 
-    public void Execute(Action<T> whenSet)
+    public void Match(Action<T> some)
     {
-        if (whenSet is null) throw new ArgumentNullException(nameof(whenSet));
+        if (some is null) throw new ArgumentNullException(nameof(some));
 
-        ExecuteInner(whenSet, null);
+        MatchInner(some, null);
     }
 
-    public void Execute(Action whenNotSet)
+    public void Match(Action none)
     {
-        if (whenNotSet is null) throw new ArgumentNullException(nameof(whenNotSet));
+        if (none is null) throw new ArgumentNullException(nameof(none));
 
-        ExecuteInner(null, whenNotSet);
+        MatchInner(null, none);
     }
 
-    public void Execute(Action<T> whenSet, Action whenNotSet)
+    public void Match(Action<T> some, Action none)
     {
-        if (whenSet is null) throw new ArgumentNullException(nameof(whenSet));
-        if (whenNotSet is null) throw new ArgumentNullException(nameof(whenNotSet));
+        if (some is null) throw new ArgumentNullException(nameof(some));
+        if (none is null) throw new ArgumentNullException(nameof(none));
 
-        ExecuteInner(whenSet, whenNotSet);
+        MatchInner(some, none);
     }
 
-    private void ExecuteInner(Action<T> whenSet, Action whenNotSet)
+    private void MatchInner(Action<T> some, Action none)
     {
-        if (IsSome && whenSet != null)
+        if (IsSome && some != null)
         {
-            whenSet(Value);
+            some(Value);
         }
-        else if (IsNone && whenNotSet != null)
+        else if (IsNone && none != null)
         {
-            whenNotSet();
+            none();
         }
     }
 
-    public TResult Execute<TResult>(Func<T, TResult> whenSet, Func<TResult> whenNotSet)
+    public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none)
     {
-        if (whenSet is null) throw new ArgumentNullException(nameof(whenSet));
-        if (whenNotSet is null) throw new ArgumentNullException(nameof(whenNotSet));
+        if (some is null) throw new ArgumentNullException(nameof(some));
+        if (none is null) throw new ArgumentNullException(nameof(none));
 
-        return ExecuteInner(whenSet, whenNotSet);
+        return MatchInner(some, none);
     }
 
-    private TResult ExecuteInner<TResult>(Func<T, TResult> whenSet, Func<TResult> whenNotSet)
+    private TResult MatchInner<TResult>(Func<T, TResult> some, Func<TResult> none)
     {
         if (IsSome)
         {
-            return whenSet(Value);
+            return some(Value);
         }
         else
         {
-            return whenNotSet();
+            return none();
         }
+    }
+
+    public override string ToString()
+    {
+        if (IsSome)
+        {
+            return $"Maybe<{typeof(T).Name}> Value: {Value}";
+        }
+
+        return $"Maybe<{typeof(T).Name}>: None";
     }
 
 }

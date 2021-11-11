@@ -12,14 +12,14 @@ namespace FunctionalRecords.Tests
         [Fact]
         public void Result_DefaultConstructor_SetsSuccessToFalse()
         {
-            Result r = new Result();
+            Result r = new();
             r.IsSuccess.Should().BeFalse();
         }
 
         [Fact]
         public void ResultTValue_DefaultConstructor_SetsSuccessToFalse()
         {
-            Result<int> r = new Result<int>();
+            Result<int> r = new();
             r.IsSuccess.Should().BeFalse();
         }
 
@@ -258,7 +258,7 @@ namespace FunctionalRecords.Tests
             r.Exception.Value.Message.Should().Be(ErrorMessage);
         }
 
-        private IEnumerable<string> GetErrors()
+        private static IEnumerable<string> GetErrors()
         {
             yield return "a";
             yield return "b";

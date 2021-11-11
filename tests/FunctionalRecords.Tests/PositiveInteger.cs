@@ -16,5 +16,5 @@ public record PositiveInteger : ValueRecord<int, PositiveInteger>
         }
     }
 
-    public static implicit operator PositiveInteger (int i) => new PositiveInteger(i);
+    public static implicit operator PositiveInteger (int i) => new(i);
 }

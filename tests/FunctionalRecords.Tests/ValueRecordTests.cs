@@ -13,7 +13,9 @@ public class ValueRecordTests
     public void ValidationErrorExists_ThrowsValidationException(string firstName, string lastName)
     {
         // ReSharper disable once ObjectCreationAsStatement
+#pragma warning disable CA1806 // Do not ignore method results
         Action a = () => new PersonName((firstName, lastName));
+#pragma warning restore CA1806 // Do not ignore method results
 
         a.Should().Throw<ValidationException>();
     }
@@ -21,15 +23,15 @@ public class ValueRecordTests
     [Fact]
     public void Constructor_CallsTransformValueBeforeSettingValue()
     {
-        PersonName pn = new PersonName(("Jane", "Doe"));
+        PersonName pn = new(("Jane", "Doe"));
         pn.Value.LastName.Should().Be("DOE");
     }
 
     [Fact]
     public void TwoStructurallyEqualObject_AreEqual_ReturnsTrue()
     {
-        PersonName pn1 = new PersonName(("Jane", "Doe"));
-        PersonName pn2 = new PersonName(("Jane", "Doe"));
+        PersonName pn1 = new(("Jane", "Doe"));
+        PersonName pn2 = new(("Jane", "Doe"));
 
         pn1.Equals(pn2).Should().BeTrue();
         (pn1 == pn2).Should().BeTrue();
