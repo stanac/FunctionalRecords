@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FunctionalRecords.Tests;
@@ -12,6 +13,14 @@ public class MaybeTests
         Maybe<string> s = null;
 
         s.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void DefaultConstructor_SetsValueToNotSet()
+    {
+        Maybe<int> i = new Maybe<int>();
+        i.IsNone.Should().BeTrue();
+        i.IsSome.Should().BeFalse();
     }
 
     [Fact]
@@ -192,6 +201,48 @@ public class MaybeTests
 
         s.Execute(
             whenNotSet: new Action(() => value = -3)
+        );
+
+        value.Should().Be(-2);
+    }
+
+    [Fact]
+    public async Task MaybeSet_ExecuteAsyncFunc_ReturnsResult()
+    {
+        Maybe<string> s = "1234";
+
+        int value = await s.Execute(
+            whenSet: async (sArg) =>
+            {
+                await Task.Delay(0);
+                return sArg.Length;
+            },
+            whenNotSet: async () =>
+            {
+                await Task.Delay(0);
+                return -2;
+            }
+        );
+
+        value.Should().Be(4);
+    }
+
+    [Fact]
+    public async Task MaybeNotSet_ExecuteAsyncFunc_ReturnsResult()
+    {
+        Maybe<string> s = Maybe<string>.None;
+
+        int value = await s.Execute(
+            whenSet: async (sArg) =>
+            {
+                await Task.Delay(0);
+                return sArg.Length;
+            },
+            whenNotSet: async () =>
+            {
+                await Task.Delay(0);
+                return -2;
+            }
         );
 
         value.Should().Be(-2);
