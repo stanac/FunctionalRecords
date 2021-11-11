@@ -10,7 +10,8 @@ public static class Converters
         {
             return new List<JsonConverter>
             {
-                new MaybeConverterFactory()
+                new MaybeConverterFactory(),
+                new ResultConverterFactory()
             };
         }
     }
