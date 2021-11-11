@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace FunctionalRecords;
+
+public abstract record ValueRecord<T, TSelf>
+    where TSelf : ValueRecord<T, TSelf>
+{
+    public T Value { get; }
+
+    protected ValueRecord(T value)
+    {
+        if (value == null) throw new ArgumentNullException(nameof(value));
+
+        // ReSharper disable once VirtualMemberCallInConstructor
+        Value = TransformValue(value);
+        Validate(Value);
+    }
+
+    protected abstract IEnumerable<string> GetValidationErrors(T value);
+
+    protected virtual void AfterSuccessfulValidation()
+    {
+    }
+
+    protected void Validate(T value)
+    {
+        List<string> errors = GetValidationErrors(value).ToList();
+
+        if (errors.Any())
+        {
+            string error = $"Value object {typeof(TSelf).Name} validation error";
+            if (errors.Count > 1)
+            {
+                error += "s";
+            }
+
+            error += ": " + string.Join("; ", errors);
+            throw new ValidationException(typeof(TSelf), error);
+        }
+
+        AfterSuccessfulValidation();
+    }
+
+    protected virtual T TransformValue(T value) => value;
+}
