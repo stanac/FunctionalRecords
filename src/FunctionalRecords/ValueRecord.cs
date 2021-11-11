@@ -4,10 +4,14 @@ using System.Linq;
 
 namespace FunctionalRecords;
 
-public abstract record ValueRecord<T, TSelf>
-    where TSelf : ValueRecord<T, TSelf>
+public abstract record ValueRecord<T>
 {
     public T Value { get; }
+
+    [Obsolete("Use constructor ValueRecord(T value)")]
+    public ValueRecord()
+    {
+    }
 
     protected ValueRecord(T value)
     {
@@ -30,14 +34,14 @@ public abstract record ValueRecord<T, TSelf>
 
         if (errors.Any())
         {
-            string error = $"Value object {typeof(TSelf).Name} validation error";
+            string error = $"Value object {GetType().Name} validation error";
             if (errors.Count > 1)
             {
                 error += "s";
             }
 
             error += ": " + string.Join("; ", errors);
-            throw new ValidationException(typeof(TSelf), error);
+            throw new ValidationException(GetType().Name, error);
         }
 
         AfterSuccessfulValidation();

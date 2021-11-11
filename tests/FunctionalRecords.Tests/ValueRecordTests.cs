@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using FunctionalRecords.Tests.TestObjects;
 using Xunit;
 
 namespace FunctionalRecords.Tests;

@@ -6,6 +6,11 @@ namespace FunctionalRecords;
 
 public readonly record struct Result
 {
+    [Obsolete("Use Result.Success(...) or Result.Failure(...)")]
+    public Result()
+    {
+    }
+
     private Result(bool success, IReadOnlyList<string> errors, Exception exception)
     {
         if (errors is null) throw new ArgumentNullException(nameof(errors));
@@ -15,10 +20,10 @@ public readonly record struct Result
         Exception = exception;
     }
 
-    public bool IsSuccess { get; }
+    public bool IsSuccess { get; } = false;
     public bool IsFailure => !IsSuccess;
     public IReadOnlyList<string> Errors { get; } = new List<string>();
-    public Maybe<Exception> Exception { get; }
+    public Maybe<Exception> Exception { get; } = Maybe<Exception>.None;
 
     public static Result Success() => new(true, new List<string>(), null);
 
@@ -51,6 +56,12 @@ public readonly record struct Result
 
 public readonly record struct Result<TValue>
 {
+
+    [Obsolete("Use Result.Success<T>(...) or Result.Failure<T>(...)")]
+    public Result()
+    {
+    }
+
     internal Result(bool success, Maybe<TValue> value, IReadOnlyList<string> errors, Maybe<Exception> exception)
     {
         if (errors == null) throw new ArgumentNullException(nameof(value));
@@ -61,9 +72,9 @@ public readonly record struct Result<TValue>
         Exception = exception;
     }
 
-    public bool IsSuccess { get; }
+    public bool IsSuccess { get; } = false;
     public bool IsFailure => !IsSuccess;
     public IReadOnlyList<string> Errors { get; } = new List<string>();
-    public Maybe<TValue> Value { get; }
-    public Maybe<Exception> Exception { get; }
+    public Maybe<TValue> Value { get; } = Maybe<TValue>.None;
+    public Maybe<Exception> Exception { get; } = Maybe<Exception>.None;
 }

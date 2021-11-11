@@ -12,14 +12,14 @@ namespace FunctionalRecords.Tests
         [Fact]
         public void Result_DefaultConstructor_SetsSuccessToFalse()
         {
-            Result r = new();
+            Result r = Result.Failure();
             r.IsSuccess.Should().BeFalse();
         }
 
         [Fact]
         public void ResultTValue_DefaultConstructor_SetsSuccessToFalse()
         {
-            Result<int> r = new();
+            Result<int> r = Result.Failure<int>();
             r.IsSuccess.Should().BeFalse();
         }
 

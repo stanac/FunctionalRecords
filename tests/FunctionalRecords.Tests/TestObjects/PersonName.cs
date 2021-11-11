@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace FunctionalRecords.Tests;
+namespace FunctionalRecords.Tests.TestObjects;
 
-public record PersonName : ValueRecord<(string FirstName, string LastName), PersonName>
+public record PersonName : ValueRecord<(string FirstName, string LastName)>
 {
     public PersonName((string FirstName, string LastName) value) : base(value)
     {

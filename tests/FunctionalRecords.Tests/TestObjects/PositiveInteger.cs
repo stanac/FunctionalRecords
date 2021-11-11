@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace FunctionalRecords.Tests;
+namespace FunctionalRecords.Tests.TestObjects;
 
-public record PositiveInteger : ValueRecord<int, PositiveInteger>
+public record PositiveInteger : ValueRecord<int>
 {
     public PositiveInteger(int value) : base(value)
     {
@@ -16,5 +16,5 @@ public record PositiveInteger : ValueRecord<int, PositiveInteger>
         }
     }
 
-    public static implicit operator PositiveInteger (int i) => new(i);
+    public static implicit operator PositiveInteger(int i) => new(i);
 }
