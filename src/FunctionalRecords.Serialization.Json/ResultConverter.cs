@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FunctionRecords.Serialization.Json;
+namespace FunctionalRecords.Serialization.Json;
 
 internal class ResultConverter : JsonConverter<Result>
 {
@@ -20,7 +20,7 @@ internal class ResultConverter : JsonConverter<Result>
 
     public override void Write(Utf8JsonWriter writer, Result value, JsonSerializerOptions options)
     {
-        ResultState state = new ResultState(value);
+        ResultState state = new(value);
 
         JsonConverter<ResultState> stateConverter = options.GetConverter(typeof(ResultState)) as JsonConverter<ResultState>;
         stateConverter.Write(writer, state, options);
@@ -43,7 +43,7 @@ internal class ResultConverter<T> : JsonConverter<Result<T>>
 
     public override void Write(Utf8JsonWriter writer, Result<T> value, JsonSerializerOptions options)
     {
-        ResultState<T> state = new ResultState<T>(value);
+        ResultState<T> state = new(value);
 
         JsonConverter<ResultState<T>> stateConverter = options.GetConverter(typeof(ResultState<T>)) as JsonConverter<ResultState<T>>;
         stateConverter.Write(writer, state, options);

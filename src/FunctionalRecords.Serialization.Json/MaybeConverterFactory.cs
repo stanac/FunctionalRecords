@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FunctionRecords.Serialization.Json;
+namespace FunctionalRecords.Serialization.Json;
 
 internal class MaybeConverterFactory : JsonConverterFactory
 {
@@ -15,9 +15,9 @@ internal class MaybeConverterFactory : JsonConverterFactory
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        Type subType = typeToConvert.GetGenericArguments()[0];
+        Type genericArgumentType = typeToConvert.GetGenericArguments()[0];
 
-        Type converterType = typeof(MaybeConverter<>).MakeGenericType(subType);
+        Type converterType = typeof(MaybeConverter<>).MakeGenericType(genericArgumentType);
         return Activator.CreateInstance(converterType) as JsonConverter;
     }
 }

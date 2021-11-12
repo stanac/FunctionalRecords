@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;
 
-namespace FunctionRecords.Serialization.Json.Tests
+namespace FunctionalRecords.Serialization.Json.Tests
 {
     public class MaybeConverterTests
     {
@@ -22,7 +22,7 @@ namespace FunctionRecords.Serialization.Json.Tests
         [Fact]
         public void NestedMaybeObject_Serialize_Deserialize_ReturnsEqualObject()
         {
-            TestMaybeObject t1 = new ()
+            TestMaybeObject t1 = new()
             {
                 B = true,
                 I = 44,

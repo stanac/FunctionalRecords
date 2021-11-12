@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalRecords", "src\Fu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalRecords.Tests", "tests\FunctionalRecords.Tests\FunctionalRecords.Tests.csproj", "{0AE4EA5A-6D86-4142-A376-6947AC49F365}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionRecords.Serialization.Json", "src\FunctionRecords.Serialization.Json\FunctionRecords.Serialization.Json.csproj", "{EAB77D52-3A2F-4060-B51B-09C5FC3ACF0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalRecords.Serialization.Json", "src\FunctionalRecords.Serialization.Json\FunctionalRecords.Serialization.Json.csproj", "{EAB77D52-3A2F-4060-B51B-09C5FC3ACF0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionRecords.Serialization.Json.Tests", "Tests\FunctionRecords.Serialization.Json.Tests\FunctionRecords.Serialization.Json.Tests.csproj", "{72B6811D-09B0-4724-BF07-FE716F5335CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalRecords.Serialization.Json.Tests", "Tests\FunctionalRecords.Serialization.Json.Tests\FunctionalRecords.Serialization.Json.Tests.csproj", "{72B6811D-09B0-4724-BF07-FE716F5335CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

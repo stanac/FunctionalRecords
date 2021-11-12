@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FunctionRecords.Serialization.Json;
+namespace FunctionalRecords.Serialization.Json;
 
 public static class Converters
 {
@@ -11,7 +11,8 @@ public static class Converters
             return new List<JsonConverter>
             {
                 new MaybeConverterFactory(),
-                new ResultConverterFactory()
+                new ResultConverterFactory(),
+                new ValueTupleConverterFactory()
             };
         }
     }

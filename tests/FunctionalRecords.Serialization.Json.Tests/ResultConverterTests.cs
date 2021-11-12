@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using FunctionalRecords;
+using FunctionalRecords.Serialization.Json;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;
 
-namespace FunctionRecords.Serialization.Json.Tests;
+namespace FunctionalRecords.Serialization.Json.Tests;
 
 public class ResultConverterTests
 {

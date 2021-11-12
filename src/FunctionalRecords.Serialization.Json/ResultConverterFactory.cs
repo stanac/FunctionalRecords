@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FunctionRecords.Serialization.Json;
+namespace FunctionalRecords.Serialization.Json;
 
 internal class ResultConverterFactory : JsonConverterFactory
 {

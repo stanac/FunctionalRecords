@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FunctionRecords.Serialization.Json\FunctionRecords.Serialization.Json.csproj" />
+    <ProjectReference Include="..\..\src\FunctionalRecords.Serialization.Json\FunctionalRecords.Serialization.Json.csproj" />
   </ItemGroup>
 
 </Project>
