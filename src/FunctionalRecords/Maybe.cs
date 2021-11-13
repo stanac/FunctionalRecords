@@ -4,10 +4,10 @@ namespace FunctionalRecords;
 
 public readonly record struct Maybe<T>
 {
-    private readonly bool _setToNull;
-    private readonly T _value;
+    private readonly bool _setToNull = false;
+    private readonly T _value = default;
 
-    public bool IsSome { get; }
+    public bool IsSome { get; } = false;
     public bool IsNone => !IsSome;
 
     public T Value
@@ -42,10 +42,10 @@ public readonly record struct Maybe<T>
     [Obsolete("Use Maybe<T>.None or Maybe<T>.From(...)")]
     public Maybe()
     {
-        IsSome = false;
-        _setToNull = false;
-        _value = default;
+        throw new InvalidOperationException("Do not call this constructor");
     }
+
+    
 
     public Maybe(T value)
     {
