@@ -11,7 +11,7 @@ public readonly record struct Result
     {
     }
 
-    private Result(bool success, IReadOnlyList<string> errors, Exception exception)
+    private Result(bool success, IReadOnlyList<string> errors, Maybe<Exception> exception)
     {
         if (errors is null) throw new ArgumentNullException(nameof(errors));
         
@@ -25,27 +25,27 @@ public readonly record struct Result
     public IReadOnlyList<string> Errors { get; } = new List<string>();
     public Maybe<Exception> Exception { get; } = Maybe<Exception>.None;
 
-    public static Result Success() => new(true, new List<string>(), null);
+    public static Result Success() => new(true, new List<string>(), Maybe<Exception>.None);
 
-    public static Result<TValue> Success<TValue>(TValue value) => new(true, value, new List<string>(), null);
+    public static Result<TValue> Success<TValue>(TValue value) => new(true, value, new List<string>(), Maybe<Exception>.None);
 
-    public static Result Failure() => new(false, new List<string>(), null);
+    public static Result Failure() => new(false, new List<string>(), Maybe<Exception>.None);
 
-    public static Result Failure(params string[] errors) => Failure(null, errors?.ToList() ?? new List<string>());
+    public static Result Failure(params string[] errors) => Failure(Maybe<Exception>.None, errors?.ToList() ?? new List<string>());
 
-    public static Result Failure(IEnumerable<string> errors) => Failure(null, errors?.ToList() ?? new List<string>());
+    public static Result Failure(IEnumerable<string> errors) => Failure(Maybe<Exception>.None, errors?.ToList() ?? new List<string>());
 
-    public static Result Failure(Exception exception, params string[] errors) => Failure(exception, errors?.ToList() ?? new List<string>());
+    public static Result Failure(Maybe<Exception> exception, params string[] errors) => Failure(exception, errors?.ToList() ?? new List<string>());
 
-    public static Result Failure(Exception exception, IEnumerable<string> errors) => Failure(exception, errors?.ToList() ?? new List<string>());
+    public static Result Failure(Maybe<Exception> exception, IEnumerable<string> errors) => Failure(exception, errors?.ToList() ?? new List<string>());
 
-    public static Result Failure(Exception exception, IReadOnlyList<string> errors) => new(false, errors, exception);
+    public static Result Failure(Maybe<Exception> exception, IReadOnlyList<string> errors) => new(false, errors, exception);
 
     public static Result<TValue> Failure<TValue>(params string[] errors) => Failure<TValue>(errors?.ToList() ?? new List<string>());
 
     public static Result<TValue> Failure<TValue>(IEnumerable<string> errors) => Failure<TValue>(errors?.ToList() ?? new List<string>());
 
-    public static Result<TValue> Failure<TValue>(IReadOnlyList<string> errors) => new(false, Maybe<TValue>.None, errors ?? new List<string>(), null);
+    public static Result<TValue> Failure<TValue>(IReadOnlyList<string> errors) => new(false, Maybe<TValue>.None, errors ?? new List<string>(), Maybe<Exception>.None);
 
     public static Result<TValue> Failure<TValue>(Exception exception, IEnumerable<string> errors) => Failure<TValue>(exception, errors?.ToList() ?? new List<string>());
 

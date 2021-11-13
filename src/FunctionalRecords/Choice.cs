@@ -29,8 +29,8 @@ namespace FunctionalRecords
         public Maybe<T1> Choice1 { get; } = Maybe<T1>.None;
         public Maybe<T2> Choice2 { get; } = Maybe<T2>.None;
 
-        public static Choice<T1, T2> From(T1 value) => new Choice<T1, T2>(value);
-        public static Choice<T1, T2> From(T2 value) => new Choice<T1, T2>(value);
+        public static Choice<T1, T2> From(T1 value) => new(value);
+        public static Choice<T1, T2> From(T2 value) => new(value);
 
         public bool Is<T>()
         {

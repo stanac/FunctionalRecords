@@ -11,6 +11,7 @@ public abstract record ValueRecord<T>
     [Obsolete("Use constructor ValueRecord(T value)")]
     public ValueRecord()
     {
+        Value = (T)Activator.CreateInstance(typeof(T))!;
     }
 
     protected ValueRecord(T value)

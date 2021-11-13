@@ -5,7 +5,7 @@ namespace FunctionalRecords;
 public readonly record struct Maybe<T>
 {
     private readonly bool _setToNull = false;
-    private readonly T _value = default;
+    private readonly T? _value = default;
 
     public bool IsSome { get; } = false;
     public bool IsNone => !IsSome;
@@ -22,17 +22,17 @@ public readonly record struct Maybe<T>
                 throw new InvalidOperationException(error);
             }
 
-            return _value;
+            return _value!;
         }
     }
 
-    public T ValueOrDefault
+    public T? ValueOrDefault
     {
         get
         {
             if (IsSome)
             {
-                return _value;
+                return _value!;
             }
 
             return default;
@@ -82,7 +82,7 @@ public readonly record struct Maybe<T>
         MatchInner(some, none);
     }
 
-    private void MatchInner(Action<T> some, Action none)
+    private void MatchInner(Action<T>? some, Action? none)
     {
         if (IsSome && some != null)
         {
