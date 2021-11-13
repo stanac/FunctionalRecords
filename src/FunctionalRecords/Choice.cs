@@ -4,6 +4,9 @@ namespace FunctionalRecords
 {
     public readonly record struct Choice<T1, T2>
     {
+        private readonly T1? _choice1 = default;
+        private readonly T2? _choice2 = default;
+
         public int SelectedIndex { get; } = -1;
 
         [Obsolete("Use Choice.From<TType>(...)")]
@@ -12,22 +15,19 @@ namespace FunctionalRecords
             // throw new InvalidOperationException("Do not call this constructor");
         }
 
-        private Choice(NotNullValue<T1> choice1)
+        private Choice(T1 choice1)
         {
             if (choice1 is null) throw new ArgumentNullException(nameof(choice1));
             SelectedIndex = 1;
-            Choice1 = choice1.Value;
+            _choice1 = choice1;
         }
 
-        private Choice(NotNullValue<T2> choice2)
+        private Choice(T2 choice2)
         {
             if (choice2 is null) throw new ArgumentNullException(nameof(choice2));
             SelectedIndex = 2;
-            Choice2 = choice2.Value;
+            _choice2 = choice2;
         }
-
-        public Maybe<T1> Choice1 { get; } = Maybe<T1>.None;
-        public Maybe<T2> Choice2 { get; } = Maybe<T2>.None;
 
         public static Choice<T1, T2> From(T1 value) => new(value);
         public static Choice<T1, T2> From(T2 value) => new(value);
@@ -45,8 +45,8 @@ namespace FunctionalRecords
         {
             switch (SelectedIndex)
             {
-                case 1: matchT1(Choice1.Value); break;
-                case 2: matchT2(Choice2.Value); break;
+                case 1: matchT1(_choice1!); break;
+                case 2: matchT2(_choice2!); break;
             }
         }
 
@@ -54,8 +54,8 @@ namespace FunctionalRecords
         {
             return SelectedIndex switch
             {
-                1 => matchT1(Choice1.Value),
-                2 => matchT2(Choice2.Value),
+                1 => matchT1(_choice1!),
+                2 => matchT2(_choice2!),
                 _ => throw new ArgumentException("Uncreachable code"),
             };
         }
