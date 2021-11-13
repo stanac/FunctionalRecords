@@ -12,7 +12,8 @@ public static class Converters
             {
                 new MaybeConverterFactory(),
                 new ResultConverterFactory(),
-                new ValueTupleConverterFactory()
+                new ValueTupleConverterFactory(),
+                new ChoiceConverterFactory()
             };
         }
     }
