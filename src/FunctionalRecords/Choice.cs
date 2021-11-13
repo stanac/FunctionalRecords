@@ -9,7 +9,7 @@ namespace FunctionalRecords
         [Obsolete("Use Choice.From<TType>(...)")]
         public Choice()
         {
-            throw new InvalidOperationException("Do not call this constructor");
+            // throw new InvalidOperationException("Do not call this constructor");
         }
 
         private Choice(NotNullValue<T1> choice1)

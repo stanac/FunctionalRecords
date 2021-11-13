@@ -42,10 +42,8 @@ public readonly record struct Maybe<T>
     [Obsolete("Use Maybe<T>.None or Maybe<T>.From(...)")]
     public Maybe()
     {
-        throw new InvalidOperationException("Do not call this constructor");
+        
     }
-
-    
 
     public Maybe(T value)
     {
