@@ -8,11 +8,11 @@ using Xunit;
 
 namespace FunctionalRecords.Serialization.Json.Tests;
 
-public class ResultConverterTests
+public class ResultSerializationTests
 {
     private readonly JsonSerializerOptions _serializerOptions;
 
-    public ResultConverterTests()
+    public ResultSerializationTests()
     {
         _serializerOptions = new();
         foreach (JsonConverter c in Converters.AllConverters)
