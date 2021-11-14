@@ -7,12 +7,20 @@ internal class ChoiceConverterFactory : JsonConverterFactory
 {
     private static readonly Type[] _supportedTypes = new[]
     {
-        typeof(Choice<,>)
+        typeof(Choice<,>),
+        typeof(Choice<,,>),
+        typeof(Choice<,,,>),
+        typeof(Choice<,,,,>),
+        typeof(Choice<,,,,,>)
     };
 
     private static readonly Type[] _converterTypes = new[]
     {
-        typeof(ChoiceConverter<,>)
+        typeof(ChoiceConverter<,>),
+        typeof(ChoiceConverter<,,>),
+        typeof(ChoiceConverter<,,,>),
+        typeof(ChoiceConverter<,,,,>),
+        typeof(ChoiceConverter<,,,,,>)
     };
 
     public override bool CanConvert(Type typeToConvert)
