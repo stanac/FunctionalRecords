@@ -211,8 +211,8 @@ Records:
 Choice records are `readonly record struct`s. They hold one of given values.
 
 Members:
-- `static Choice<T1, T2> From(T1 value)`
-- `static Choice<T1, T2> From(T2 value)`
+- `static Choice<T1, T2> From(T1 value)` - value cannot be null
+- `static Choice<T1, T2> From(T2 value)` - value cannot be null
 - `Value` - value assigned to choice
 - `Type GetChosenType()` - return `typeof(T1)` or `typeof(T2)`
 - `Is<T>()` - returns `true` if `T` is of give type of `Value`
