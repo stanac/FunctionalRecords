@@ -5,7 +5,7 @@ using Xunit;
 
 namespace FunctionalRecords.Tests;
 
-public class ChoiceTests
+public class Choice2Tests
 {
     [Fact]
     public void Choice2_SetToT1_SetsSelectedIndexTo1()
@@ -15,7 +15,7 @@ public class ChoiceTests
     }
 
     [Fact]
-    public void Choice2_SetToT2_SetsSelectedIndexTo1()
+    public void Choice2_SetToT2_SetsSelectedIndexTo2()
     {
         Choice<int, string> c = "a";
         c.SelectedIndex.Should().Be(2);
@@ -121,5 +121,21 @@ public class ChoiceTests
             );
 
         called.Should().Be(2);
+    }
+
+    [Fact]
+    public void Choice2_SetToT1Null_ThrowsException()
+    {
+        string s = null;
+        Action a = () => { Choice<string, int> c = Choice<string, int>.From(s); };
+        a.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Choice2_SetToT2Null_ThrowsException()
+    {
+        string s = null;
+        Action a = () => { Choice<int, string> c = Choice<int, string>.From(s); };
+        a.Should().Throw<ArgumentNullException>();
     }
 }
