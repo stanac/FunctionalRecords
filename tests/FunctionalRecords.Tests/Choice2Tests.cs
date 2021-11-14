@@ -138,4 +138,19 @@ public class Choice2Tests
         Action a = () => { Choice<int, string> c = Choice<int, string>.From(s); };
         a.Should().Throw<ArgumentNullException>();
     }
+
+    [Fact]
+    public void Choice2_SetToT1_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string> c = 2;
+        c.GetChosenType().Should().Be(typeof(int));
+    }
+
+
+    [Fact]
+    public void Choice2_SetToT2_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string> c = "a";
+        c.GetChosenType().Should().Be(typeof(string));
+    }
 }

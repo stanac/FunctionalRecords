@@ -32,6 +32,16 @@ namespace FunctionalRecords
         public static Choice<T1, T2> From(T1 value) => new(value);
         public static Choice<T1, T2> From(T2 value) => new(value);
 
+        public Type GetChosenType()
+        {
+            return SelectedIndex switch
+            {
+                1 => typeof(T1),
+                2 => typeof(T2),
+                _ => throw new IndexOutOfRangeException("Unreachable code")
+            };
+        }
+
         public bool Is<T>()
         {
             Type tType = typeof(T);
@@ -56,7 +66,7 @@ namespace FunctionalRecords
             {
                 1 => matchT1(_choice1!),
                 2 => matchT2(_choice2!),
-                _ => throw new ArgumentException("Uncreachable code"),
+                _ => throw new IndexOutOfRangeException("Unreachable code")
             };
         }
 
@@ -103,6 +113,17 @@ namespace FunctionalRecords
         public static Choice<T1, T2, T3> From(T2 value) => new(value);
         public static Choice<T1, T2, T3> From(T3 value) => new(value);
 
+        public Type GetChosenType()
+        {
+            return SelectedIndex switch
+            {
+                1 => typeof(T1),
+                2 => typeof(T2),
+                3 => typeof(T3),
+                _ => throw new IndexOutOfRangeException("Unreachable code")
+            };
+        }
+
         public bool Is<T>()
         {
             Type tType = typeof(T);
@@ -130,7 +151,7 @@ namespace FunctionalRecords
                 1 => matchT1(_choice1!),
                 2 => matchT2(_choice2!),
                 3 => matchT3(_choice3!),
-                _ => throw new ArgumentException("Uncreachable code")
+                _ => throw new IndexOutOfRangeException("Unreachable code")
             };
         }
 
@@ -187,6 +208,18 @@ namespace FunctionalRecords
         public static Choice<T1, T2, T3, T4> From(T3 value) => new(value);
         public static Choice<T1, T2, T3, T4> From(T4 value) => new(value);
 
+        public Type GetChosenType()
+        {
+            return SelectedIndex switch
+            {
+                1 => typeof(T1),
+                2 => typeof(T2),
+                3 => typeof(T3),
+                4 => typeof(T4),
+                _ => throw new IndexOutOfRangeException("Unreachable code")
+            };
+        }
+
         public bool Is<T>()
         {
             Type tType = typeof(T);
@@ -217,7 +250,7 @@ namespace FunctionalRecords
                 2 => matchT2(_choice2!),
                 3 => matchT3(_choice3!),
                 4 => matchT4(_choice4!),
-                _ => throw new ArgumentException("Uncreachable code")
+                _ => throw new IndexOutOfRangeException("Unreachable code")
             };
         }
 
@@ -284,6 +317,19 @@ namespace FunctionalRecords
         public static Choice<T1, T2, T3, T4, T5> From(T4 value) => new(value);
         public static Choice<T1, T2, T3, T4, T5> From(T5 value) => new(value);
 
+        public Type GetChosenType()
+        {
+            return SelectedIndex switch
+            {
+                1 => typeof(T1),
+                2 => typeof(T2),
+                3 => typeof(T3),
+                4 => typeof(T4),
+                5 => typeof(T5),
+                _ => throw new IndexOutOfRangeException("Unreachable code")
+            };
+        }
+
         public bool Is<T>()
         {
             Type tType = typeof(T);
@@ -318,7 +364,7 @@ namespace FunctionalRecords
                 3 => matchT3(_choice3!),
                 4 => matchT4(_choice4!),
                 5 => matchT5(_choice5!),
-                _ => throw new ArgumentException("Uncreachable code")
+                _ => throw new IndexOutOfRangeException("Unreachable code")
             };
         }
 
@@ -395,6 +441,20 @@ namespace FunctionalRecords
         public static Choice<T1, T2, T3, T4, T5, T6> From(T5 value) => new(value);
         public static Choice<T1, T2, T3, T4, T5, T6> From(T6 value) => new(value);
 
+        public Type GetChosenType()
+        {
+            return SelectedIndex switch
+            {
+                1 => typeof(T1),
+                2 => typeof(T2),
+                3 => typeof(T3),
+                4 => typeof(T4),
+                5 => typeof(T5),
+                6 => typeof(T6),
+                _ => throw new IndexOutOfRangeException("Unreachable code")
+            };
+        }
+
         public bool Is<T>()
         {
             Type tType = typeof(T);
@@ -432,7 +492,7 @@ namespace FunctionalRecords
                 4 => matchT4(_choice4!),
                 5 => matchT5(_choice5!),
                 6 => matchT6(_choice6!),
-                _ => throw new ArgumentException("Uncreachable code")
+                _ => throw new IndexOutOfRangeException("Unreachable code")
             };
         }
 

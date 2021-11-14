@@ -341,4 +341,39 @@ public class Choice5Tests
         Action a = () => { Choice<int, float, Guid, DateTime, string> c = Choice<int, float, Guid, DateTime, string>.From(s); };
         a.Should().Throw<ArgumentNullException>();
     }
+
+    [Fact]
+    public void Choice5_SetToT1_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime> c = 2;
+        c.GetChosenType().Should().Be(typeof(int));
+    }
+
+    [Fact]
+    public void Choice5_SetToT2_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime> c = "a";
+        c.GetChosenType().Should().Be(typeof(string));
+    }
+
+    [Fact]
+    public void Choice5_SetToT3_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime> c = 0.2f;
+        c.GetChosenType().Should().Be(typeof(float));
+    }
+
+    [Fact]
+    public void Choice5_SetToT4_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime> c = Guid.Empty;
+        c.GetChosenType().Should().Be(typeof(Guid));
+    }
+
+    [Fact]
+    public void Choice5_SetToT5_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime> c = DateTime.Now;
+        c.GetChosenType().Should().Be(typeof(DateTime));
+    }
 }

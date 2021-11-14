@@ -176,4 +176,25 @@ public class Choice3Tests
         Action a = () => { Choice<int, Guid, string> c = Choice<int, Guid, string>.From(s); };
         a.Should().Throw<ArgumentNullException>();
     }
+
+    [Fact]
+    public void Choice3_SetToT1_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float> c = 2;
+        c.GetChosenType().Should().Be(typeof(int));
+    }
+
+    [Fact]
+    public void Choice3_SetToT2_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float> c = "a";
+        c.GetChosenType().Should().Be(typeof(string));
+    }
+
+    [Fact]
+    public void Choice3_SetToT3_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float> c = 0.2f;
+        c.GetChosenType().Should().Be(typeof(float));
+    }
 }

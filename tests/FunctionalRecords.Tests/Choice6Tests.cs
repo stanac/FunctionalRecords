@@ -437,4 +437,46 @@ public class Choice6Tests
         Action a = () => { Choice<int, float, Guid, DateTime, float, string> c = Choice<int, float, Guid, DateTime, float, string>.From(s); };
         a.Should().Throw<ArgumentNullException>();
     }
+
+    [Fact]
+    public void Choice6_SetToT1_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = 2;
+        c.GetChosenType().Should().Be(typeof(int));
+    }
+
+    [Fact]
+    public void Choice6_SetToT2_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = "a";
+        c.GetChosenType().Should().Be(typeof(string));
+    }
+
+    [Fact]
+    public void Choice6_SetToT3_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = 0.2f;
+        c.GetChosenType().Should().Be(typeof(float));
+    }
+
+    [Fact]
+    public void Choice6_SetToT4_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = Guid.Empty;
+        c.GetChosenType().Should().Be(typeof(Guid));
+    }
+
+    [Fact]
+    public void Choice6_SetToT5_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = DateTime.Now;
+        c.GetChosenType().Should().Be(typeof(DateTime));
+    }
+
+    [Fact]
+    public void Choice6_SetToT6_GetChosenType_ReturnsCorrectType()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = DateOnly.FromDateTime(DateTime.Now);
+        c.GetChosenType().Should().Be(typeof(DateOnly));
+    }
 }
