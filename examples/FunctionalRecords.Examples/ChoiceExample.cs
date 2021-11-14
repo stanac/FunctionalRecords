@@ -14,6 +14,8 @@ public static class ChoiceExample
         Choice<int, float, double, decimal, string> choice5 = Choice<int, float, double, decimal, string>.From(3);
         Choice<int, float, double, decimal, string, bool> choice6 = 3;
 
+        Console.WriteLine(choice6.Value); // Writes "3";
+
         // call Func<T1, TResult> or Func<T2, TResult>
         int stringLength1 = stringOrInt1.Match(
             s => s.Length,

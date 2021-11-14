@@ -22,6 +22,7 @@ public static class MaybeExample
         }
 
         string valueOrDefault = s.ValueOrDefault; // returns value if present or default of <T>
+        string value = s.Value; // ⚠ Exception will be thrown if IsNone
 
         s.Match(() => Console.WriteLine("s is set")); // action called only when s has value
 
