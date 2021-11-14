@@ -197,4 +197,25 @@ public class Choice3Tests
         Choice<int, string, float> c = 0.2f;
         c.GetChosenType().Should().Be(typeof(float));
     }
+
+    [Fact]
+    public void Choice3_SetTo1_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float> c = 2;
+        c.Value.Should().Be(2);
+    }
+
+    [Fact]
+    public void Choice3_SetTo2_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float> c = "a";
+        c.Value.Should().Be("a");
+    }
+
+    [Fact]
+    public void Choice3_SetTo3_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float> c = 1.1f;
+        c.Value.Should().Be(1.1f);
+    }
 }

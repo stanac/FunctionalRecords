@@ -479,4 +479,47 @@ public class Choice6Tests
         Choice<int, string, float, Guid, DateTime, DateOnly> c = DateOnly.FromDateTime(DateTime.Now);
         c.GetChosenType().Should().Be(typeof(DateOnly));
     }
+
+    [Fact]
+    public void Choice6_SetTo1_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = 2;
+        c.Value.Should().Be(2);
+    }
+
+    [Fact]
+    public void Choice6_SetTo2_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = "a";
+        c.Value.Should().Be("a");
+    }
+
+    [Fact]
+    public void Choice6_SetTo3_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = 1.1f;
+        c.Value.Should().Be(1.1f);
+    }
+
+    [Fact]
+    public void Choice6_SetTo4_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = Guid.Empty;
+        c.Value.Should().Be(Guid.Empty);
+    }
+
+    [Fact]
+    public void Choice6_SetTo5_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = DateTime.MaxValue;
+        c.Value.Should().Be(DateTime.MaxValue);
+    }
+
+    [Fact]
+    public void Choice6_SetTo6_Value_ReturnsExpectedValue()
+    {
+        DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = date;
+        c.Value.Should().Be(date);
+    }
 }

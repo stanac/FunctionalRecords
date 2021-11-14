@@ -281,4 +281,32 @@ public class Choice4Tests
         Choice<int, string, float, Guid> c = Guid.Empty;
         c.GetChosenType().Should().Be(typeof(Guid));
     }
+
+    [Fact]
+    public void Choice4_SetTo1_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid> c = 2;
+        c.Value.Should().Be(2);
+    }
+
+    [Fact]
+    public void Choice4_SetTo2_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid> c = "a";
+        c.Value.Should().Be("a");
+    }
+
+    [Fact]
+    public void Choice4_SetTo3_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid> c = 1.1f;
+        c.Value.Should().Be(1.1f);
+    }
+
+    [Fact]
+    public void Choice4_SetTo4_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string, float, Guid> c = Guid.Empty;
+        c.Value.Should().Be(Guid.Empty);
+    }
 }

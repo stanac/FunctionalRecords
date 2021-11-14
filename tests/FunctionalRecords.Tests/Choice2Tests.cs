@@ -153,4 +153,18 @@ public class Choice2Tests
         Choice<int, string> c = "a";
         c.GetChosenType().Should().Be(typeof(string));
     }
+
+    [Fact]
+    public void Choice2_SetTo1_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string> c = 2;
+        c.Value.Should().Be(2);
+    }
+
+    [Fact]
+    public void Choice2_SetTo2_Value_ReturnsExpectedValue()
+    {
+        Choice<int, string> c = "a";
+        c.Value.Should().Be("a");
+    }
 }

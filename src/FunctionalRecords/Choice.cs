@@ -9,6 +9,19 @@ namespace FunctionalRecords
 
         public int SelectedIndex { get; } = -1;
 
+        public object Value
+        {
+            get
+            {
+                return SelectedIndex switch
+                {
+                    1 => _choice1!,
+                    2 => _choice2!,
+                    _ => throw new IndexOutOfRangeException("Unreachable code")
+                };
+            }
+        }
+
         [Obsolete("Use Choice.From<T>(...)")]
         public Choice()
         {
@@ -81,6 +94,20 @@ namespace FunctionalRecords
         private readonly T3? _choice3 = default;
 
         public int SelectedIndex { get; } = -1;
+
+        public object Value
+        {
+            get
+            {
+                return SelectedIndex switch
+                {
+                    1 => _choice1!,
+                    2 => _choice2!,
+                    3 => _choice3!,
+                    _ => throw new IndexOutOfRangeException("Unreachable code")
+                };
+            }
+        }
 
         [Obsolete("Use Choice.From<T>(...)")]
         public Choice()
@@ -168,6 +195,21 @@ namespace FunctionalRecords
         private readonly T4? _choice4 = default;
 
         public int SelectedIndex { get; } = -1;
+
+        public object Value
+        {
+            get
+            {
+                return SelectedIndex switch
+                {
+                    1 => _choice1!,
+                    2 => _choice2!,
+                    3 => _choice3!,
+                    4 => _choice4!,
+                    _ => throw new IndexOutOfRangeException("Unreachable code")
+                };
+            }
+        }
 
         [Obsolete("Use Choice.From<T>(...)")]
         public Choice()
@@ -269,6 +311,22 @@ namespace FunctionalRecords
         private readonly T5? _choice5 = default;
 
         public int SelectedIndex { get; } = -1;
+
+        public object Value
+        {
+            get
+            {
+                return SelectedIndex switch
+                {
+                    1 => _choice1!,
+                    2 => _choice2!,
+                    3 => _choice3!,
+                    4 => _choice4!,
+                    5 => _choice5!,
+                    _ => throw new IndexOutOfRangeException("Unreachable code")
+                };
+            }
+        }
 
         [Obsolete("Use Choice.From<T>(...)")]
         public Choice()
@@ -385,6 +443,23 @@ namespace FunctionalRecords
         private readonly T6? _choice6 = default;
 
         public int SelectedIndex { get; } = -1;
+
+        public object Value
+        {
+            get
+            {
+                return SelectedIndex switch
+                {
+                    1 => _choice1!,
+                    2 => _choice2!,
+                    3 => _choice3!,
+                    4 => _choice4!,
+                    5 => _choice5!,
+                    6 => _choice6!,
+                    _ => throw new IndexOutOfRangeException("Unreachable code")
+                };
+            }
+        }
 
         [Obsolete("Use Choice.From<T>(...)")]
         public Choice()
