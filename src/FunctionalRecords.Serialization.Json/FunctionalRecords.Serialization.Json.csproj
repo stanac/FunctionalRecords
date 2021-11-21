@@ -4,6 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>JsonConverters for FunctionalRecords</Description>
+    <PackageProjectUrl>https://github.com/stanac/FunctionalRecords</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stanac/FunctionalRecords</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
