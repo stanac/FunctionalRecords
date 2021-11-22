@@ -9,7 +9,7 @@ public abstract record ValueRecord<T>
     public T Value { get; }
 
     [Obsolete("Use constructor ValueRecord(T value)")]
-    public ValueRecord()
+    protected ValueRecord()
     {
         Value = (T)Activator.CreateInstance(typeof(T))!;
     }

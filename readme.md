@@ -67,7 +67,7 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 
 ```
 
-### Result and Result&lt;T&gt;
+### Result, Result&lt;T&gt; and Result&lt;T,TFailureType&gt;
 
 `Result` and `Result<T>` are `readonly record struct`s. Both can be success or failure.
 
@@ -84,9 +84,18 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 - `Maybe<Exception> Exception` - optional exception
 - `T Value` - balue of `T`
 
+`Result<T, TFailureType>` members:
+- `bool IsSuccess` - true or false
+- `bool IsFailure` - opposite of `IsSuccess`
+- `IReadOnlyList<string> Errors` - error list, empty by default, cannot be null
+- `Maybe<Exception> Exception` - optional exception
+- `T Value` - balue of `T`
+-  Maybe<TFailureType> FailureType - optinal failure type
+
 `Result` methods:
 - `static Result Success()`
 - `static Result<TValue> Success<TValue>(TValue value)`
+- `static Result<TValue, TFailureType> Success<TValue, TFailureType>(TValue value)`
 - `static Result Failure()`
 - `static Result Failure(params string[] errors)`
 - `static Result Failure(IEnumerable<string> errors)`
@@ -99,6 +108,19 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 - `static Result<TValue> Failure<TValue>(Exception exception, IEnumerable<string> errors)`
 - `static Result<TValue> Failure<TValue>(Exception exception, params string[] errors)`
 - `static Result<TValue> Failure<TValue>(Exception exception, IReadOnlyList<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(params string[] errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(IEnumerable<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(IReadOnlyList<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(Exception exception, IEnumerable<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(Exception exception, params string[] errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(Exception exception, IReadOnlyList<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, params string[] errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, IEnumerable<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, IReadOnlyList<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, Exception exception, IEnumerable<string> errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, Exception exception, params string[] errors)`
+- `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, Exception exception, IReadOnlyList<string> errors)`
 
 ```csharp
 Result rSuccess = Result.Success();
@@ -113,6 +135,22 @@ Console.WriteLine(rSuccessWithValue.Value.ValueOrDefault);
 
 Result<int> rFailureWithValue = Result.Failure<int>(new InvalidOperationException("message"), "error 1", "error 2", "error3");
 
+Result<string, FileFailures> r = Result.Failure<string, FileFailures>(FileFailures.FileTooLarge | FileFailures.WrongFileExtension, "Wrong extension and size");
+r.Is(FileFailures.FileTooLarge); // true
+r.Is(FileFailures.WrongFileExtension); // true
+r.Is(FileFailures.FileNotFound); // false
+FileFailures failureType = r.FailureType.Value; 
+```
+
+```csharp
+// FileFailures enum used in example above
+[Flags]
+public enum FileFailures
+{
+    FileNotFound,
+    FileTooLarge,
+    WrongFileExtension
+}
 ```
 
 ### ValueRecord&lt;T&gt;

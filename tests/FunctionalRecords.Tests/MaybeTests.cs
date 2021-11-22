@@ -43,6 +43,15 @@ public class MaybeTests
     }
 
     [Fact]
+    public void TwoNoneMaybeObjects_AreEqual_ReturnsTrue()
+    {
+        Maybe<string> s1 = Maybe<string>.None;
+        Maybe<string> s2 = Maybe<string>.None;
+
+        (s1 == s2).Should().BeTrue();
+    }
+
+    [Fact]
     public void ValueSet_ToString_DoesNotThrowException()
     {
         string s = Maybe<int>.From(1).ToString();

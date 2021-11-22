@@ -15,5 +15,19 @@ public static class ResultExample
         Console.WriteLine(rSuccessWithValue.Value.ValueOrDefault);
 
         Result<int> rFailureWithValue = Result.Failure<int>(new InvalidOperationException("message"), "error 1", "error 2", "error3");
+
+        Result<string, FileFailures> r = Result.Failure<string, FileFailures>(FileFailures.FileTooLarge | FileFailures.WrongFileExtension, "Wrong extension and size");
+        r.Is(FileFailures.FileTooLarge); // true
+        r.Is(FileFailures.WrongFileExtension); // true
+        r.Is(FileFailures.FileNotFound); // false
+        FileFailures failureType = r.FailureType.Value; 
+    }
+
+    [Flags]
+    public enum FileFailures
+    {
+        FileNotFound,
+        FileTooLarge,
+        WrongFileExtension
     }
 }

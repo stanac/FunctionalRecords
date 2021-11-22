@@ -15,7 +15,7 @@ public class ResultTests
         Result r = Result.Failure();
         r.IsSuccess.Should().BeFalse();
     }
-
+    
     [Fact]
     public void ResultTValue_DefaultConstructor_SetsSuccessToFalse()
     {
@@ -258,9 +258,420 @@ public class ResultTests
         r.Exception.Value.Message.Should().Be(ErrorMessage);
     }
 
+    [Fact]
+    public void ResultTValueTFailure_Success_SetsValue_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Success<int, Failures>(1);
+
+        r.IsSuccess.Should().BeTrue();
+        r.IsFailure.Should().BeFalse();
+        r.Value.Value.Should().Be(1);
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_Failure_SetsValueToNone_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>();
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>("a", "b");
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsNone.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithIEnumerableErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(GetErrors());
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithErrorList_SetsValueToNone_ErrorsToList_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(new List<string> { "a", "b" });
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsNone.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureException_SetsValueToNone_ErrorsToEmpty_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+        Result<int, Failures> r = Result.Failure<int, Failures>(ex);
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithErrorListAndException_SetsValueToNone_ErrorsToList_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+
+        Result<int, Failures> r = Result.Failure<int, Failures>(ex, new List<string> { "a", "b" });
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithErrorIEnumerableAndException_SetsValueToNone_ErrorsToList_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+
+        Result<int, Failures> r = Result.Failure<int, Failures>(ex, GetErrors());
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+    }
+    
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureType_SetsValueToNone_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2);
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureTypeWithErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2, "a", "b");
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureTypeWithIEnumerableErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2, GetErrors());
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureTypeWithErrorList_SetsValueToNone_ErrorsToList_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2, new List<string> { "a", "b" });
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureTypeException_SetsValueToNone_ErrorsToEmpty_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2, ex);
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureTypeWithErrorListAndException_SetsValueToNone_ErrorsToList_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2, ex, new List<string> { "a", "b" });
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailure_FailureWithFailureTypeWithErrorIEnumerableAndException_SetsValueToNone_ErrorsToList_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2, ex, GetErrors());
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F2).Should().BeTrue();
+        r.Is(Failures.F3).Should().BeFalse();
+    }
+    
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureType_SetsValueToNone_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F1 | FailuresFlags.F2);
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureTypeWithErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, "a", "b");
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureTypeWithIEnumerableErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, GetErrors());
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureTypeWithErrorList_SetsValueToNone_ErrorsToList_And_AllOtherPropertiesToDefault()
+    {
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, new List<string> { "a", "b" });
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsNone.Should().BeTrue();
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureTypeException_SetsValueToNone_ErrorsToEmpty_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, ex);
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().BeEmpty();
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureTypeWithErrorListAndException_SetsValueToNone_ErrorsToList_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, ex, new List<string> { "a", "b" });
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+        r.FailureType.IsSome.Should().BeTrue();
+        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
+    [Fact]
+    public void ResultTValueTFailureFlags_FailureWithFailureTypeWithErrorIEnumerableAndException_SetsValueToNone_ErrorsToList_And_ExceptionToException()
+    {
+        Exception ex = new InvalidOperationException(ErrorMessage);
+
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, ex, GetErrors());
+
+        r.IsSuccess.Should().BeFalse();
+        r.IsFailure.Should().BeTrue();
+        r.Value.IsSome.Should().BeFalse();
+        r.Errors.Should().NotBeNull();
+        r.Errors.Should().NotBeEmpty();
+        r.Errors[0].Should().Be("a");
+        r.Errors[1].Should().Be("b");
+        r.Exception.IsSome.Should().BeTrue();
+        r.Exception.Value.Message.Should().Be(ErrorMessage);
+        r.FailureType.IsSome.Should().BeTrue();
+        r.Is(FailuresFlags.F1).Should().BeTrue();
+        r.Is(FailuresFlags.F2).Should().BeTrue();
+        r.Is(FailuresFlags.F3).Should().BeFalse();
+    }
+
     private static IEnumerable<string> GetErrors()
     {
         yield return "a";
         yield return "b";
+    }
+
+    [Flags]
+    public enum FailuresFlags
+    {
+        F1 = 1,
+        F2 = 2,
+        F3 = 4
+    }
+
+    public enum Failures
+    {
+        F1,
+        F2,
+        F3
     }
 }

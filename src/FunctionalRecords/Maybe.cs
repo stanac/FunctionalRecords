@@ -123,5 +123,4 @@ public readonly record struct Maybe<T>
 
         return $"Maybe<{typeof(T).Name}>: None";
     }
-
 }

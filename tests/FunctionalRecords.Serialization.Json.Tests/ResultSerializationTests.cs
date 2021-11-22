@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
-using FunctionalRecords;
-using FunctionalRecords.Serialization.Json;
-using System;
+﻿using System;
+using FluentAssertions;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;
@@ -21,76 +21,148 @@ public class ResultSerializationTests
         }
     }
 
-    [Fact]
-    public void ResultFailureEmpty_Serialize_Deserialize_GivesEqualObjects()
+    [Theory, ClassData(typeof(ResultData))]
+    public void Serialize_Deserialize_GivesEqualObject(Result r)
     {
-        Result r1 = Result.Failure();
-        string json = JsonSerializer.Serialize(r1, _serializerOptions);
-        Result r2 = JsonSerializer.Deserialize<Result>(json, _serializerOptions);
+        string json1 = JsonSerializer.Serialize(r, _serializerOptions);
+        Result r2 = JsonSerializer.Deserialize<Result>(json1, _serializerOptions);
+        string json2 = JsonSerializer.Serialize(r2, _serializerOptions);
 
-        r2.IsSuccess.Should().BeFalse();
-        r2.Exception.IsNone.Should().BeTrue();
-        r2.Errors.Should().BeEmpty();
+        json2.Should().Be(json1);
     }
 
-    [Fact]
-    public void ResultTFailureEmpty_Serialize_Deserialize_GivesEqualObjects()
+    [Theory, ClassData(typeof(ResultTData))]
+    public void SerializeT_DeserializeT_GivesEqualObject(Result<int> r)
     {
-        Result<int> r1 = Result.Failure<int>();
-        string json = JsonSerializer.Serialize(r1, _serializerOptions);
-        Result<int> r2 = JsonSerializer.Deserialize<Result<int>>(json, _serializerOptions);
+        string json1 = JsonSerializer.Serialize(r, _serializerOptions);
+        Result<int> r2 = JsonSerializer.Deserialize<Result<int>>(json1, _serializerOptions);
+        string json2 = JsonSerializer.Serialize(r2, _serializerOptions);
 
-        r2.IsSuccess.Should().BeFalse();
-        r2.Exception.IsNone.Should().BeTrue();
-        r2.Errors.Should().BeEmpty();
+        json2.Should().Be(json1);
     }
 
-    [Fact]
-    public void ResultFailureWithErrorsAndException_Serialize_Deserialize_GivesEqualObjects()
+    [Theory, ClassData(typeof(ResultTAndTErrorData))]
+    public void SerializeTAndTError_Deserialize_GivesEqualObject(Result<int, ResultTAndTErrorData.IntError> r)
     {
-        Exception ex = new InvalidOperationException("something");
-        Result r1 = Result.Failure(ex, "1", "2");
-        string json = JsonSerializer.Serialize(r1, _serializerOptions);
-        Result r2 = JsonSerializer.Deserialize<Result>(json, _serializerOptions);
+        string json1 = JsonSerializer.Serialize(r, _serializerOptions);
+        Result<int, ResultTAndTErrorData.IntError> r2 = JsonSerializer.Deserialize<Result<int, ResultTAndTErrorData.IntError>>(json1, _serializerOptions);
+        string json2 = JsonSerializer.Serialize(r2, _serializerOptions);
 
-        r2.IsSuccess.Should().BeFalse();
-        r2.Errors.Should().HaveCount(2);
-        r2.Errors[0].Should().Be("1");
-        r2.Errors[1].Should().Be("2");
+        json2.Should().Be(json1);
     }
 
-    [Fact]
-    public void ResultTFailureWithErrorsAndException_Serialize_Deserialize_GivesEqualObjects()
+    public class ResultData: IEnumerable<object[]>
     {
-        Exception ex = new InvalidOperationException("something");
-        Result<int> r1 = Result.Failure<int>(ex, "1", "2");
-        string json = JsonSerializer.Serialize(r1, _serializerOptions);
-        Result<int> r2 = JsonSerializer.Deserialize<Result<int>>(json, _serializerOptions);
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            foreach (Result result in GetResults())
+            {
+                yield return new object[] {result};
+            }
+        }
 
-        r2.IsSuccess.Should().BeFalse();
-        r2.Errors.Should().HaveCount(2);
-        r2.Errors[0].Should().Be("1");
-        r2.Errors[1].Should().Be("2");
+        private static IEnumerable<Result> GetResults()
+        {
+            yield return Result.Success();
+            yield return Result.Failure();
+            yield return Result.Failure("a");
+            yield return Result.Failure("a", "|");
+            yield return Result.Failure(new List<string> { "a", "B" });
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    [Fact]
-    public void ResultSuccess_Serialize_Deserialize_GivesEqualObjects()
+    public class ResultTData : IEnumerable<object[]>
     {
-        Result r1 = Result.Success();
-        string json = JsonSerializer.Serialize(r1, _serializerOptions);
-        Result r2 = JsonSerializer.Deserialize<Result>(json, _serializerOptions);
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            foreach (Result<int> result in GetResults())
+            {
+                yield return new object[] { result };
+            }
+        }
 
-        r2.IsSuccess.Should().BeTrue();
+        private static IEnumerable<Result<int>> GetResults()
+        {
+             yield return Result.Success(1);
+             yield return Result.Failure<int>();
+             yield return Result.Failure<int>("a");
+             yield return Result.Failure<int>("a", "|");
+             yield return Result.Failure<int>(new List<string> { "a", "B" });
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    [Fact]
-    public void ResultTSuccess_Serialize_Deserialize_GivesEqualObjects()
+    public class ResultTAndTErrorData : IEnumerable<object[]>
     {
-        Result<int> r1 = Result.Success(4);
-        string json = JsonSerializer.Serialize(r1, _serializerOptions);
-        Result<int> r2 = JsonSerializer.Deserialize<Result<int>>(json, _serializerOptions);
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            foreach (Result<int, IntError> result in GetResults())
+            {
+                yield return new object[] { result };
+            }
+        }
 
-        r2.IsSuccess.Should().BeTrue();
-        r2.Value.ValueOrDefault.Should().Be(4);
+        private static IEnumerable<Result<int, IntError>> GetResults()
+        {
+           // yield return Result.Success<int, IntError>(1);
+            yield return Result.Failure<int, IntError>();
+            // yield return Result.Failure<int, IntError>("a");
+            // yield return Result.Failure<int, IntError>("a", "|");
+            // yield return Result.Failure<int, IntError>(new List<string> { "a", "B" });
+            // yield return Result.Failure<int, IntError>(IntError.IntIsNegative);
+            // yield return Result.Failure<int, IntError>(IntError.IntIsNegative, "a");
+            // yield return Result.Failure<int, IntError>(IntError.IntIsZero, "a", "|");
+            // yield return Result.Failure<int, IntError>(IntError.IntIsOne, new List<string> { "a", "B" });
+            // yield return Result.Failure<int, IntError>(IntError.IntIsOne, new List<string> { "a", "B" });
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        
+        public enum IntError
+        {
+            IntIsZero,
+            IntIsOne,
+            IntIsNegative
+        }
+    }
+
+    public class ResultTAndTErrorFlagsData : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            foreach (Result<int, IntErrorFlags> result in GetResults())
+            {
+                yield return new object[] { result };
+            }
+        }
+
+        private static IEnumerable<Result<int, IntErrorFlags>> GetResults()
+        {
+            yield return Result.Success<int, IntErrorFlags>(1);
+            yield return Result.Failure<int, IntErrorFlags>();
+            yield return Result.Failure<int, IntErrorFlags>("a");
+            yield return Result.Failure<int, IntErrorFlags>("a", "|");
+            yield return Result.Failure<int, IntErrorFlags>(new List<string> { "a", "B" });
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsNegative);
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsNegative, "a");
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsZero, "a", "|");
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsOne, new List<string> { "a", "B" });
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsOne | IntErrorFlags.IntIsNegative, new List<string> { "a", "B" });
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsOne | IntErrorFlags.IntIsNegative, new List<string> { "a", "B" });
+            yield return Result.Failure<int, IntErrorFlags>(IntErrorFlags.IntIsOne | IntErrorFlags.IntIsNegative | IntErrorFlags.IntIsZero, new List<string> { "a", "B" });
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        [Flags]
+        public enum IntErrorFlags
+        {
+            IntIsZero,
+            IntIsOne,
+            IntIsNegative
+        }
     }
 }
