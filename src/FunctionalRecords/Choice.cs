@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FunctionalRecords
+﻿namespace FunctionalRecords
 {
     public readonly record struct Choice<T1, T2>
     {
