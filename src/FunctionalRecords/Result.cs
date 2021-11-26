@@ -3,7 +3,7 @@
 
 namespace FunctionalRecords;
 
-public readonly record struct Result
+public readonly record struct Result : IResult
 {
     [Obsolete("Use Result.Success(...) or Result.Failure(...)")]
     public Result()
@@ -114,7 +114,7 @@ public readonly record struct Result
         => new(false, default, errors ?? new List<string>(), exception, failure);
 }
 
-public readonly record struct Result<TValue>
+public readonly record struct Result<TValue> : IResult<TValue>
 {
     [Obsolete("Use Result.Success<T>(...) or Result.Failure<T>(...)")]
     public Result()
@@ -142,7 +142,7 @@ public readonly record struct Result<TValue>
     public Maybe<Exception> Exception { get; } = Maybe<Exception>.None;
 }
 
-public readonly record struct Result<TValue, TFailureType> where TFailureType: Enum
+public readonly record struct Result<TValue, TFailureType> : IResult<TValue, TFailureType> where TFailureType: Enum
 {
     [Obsolete("Use Result.Success<T>(...) or Result.Failure<T>(...)")]
     public Result()

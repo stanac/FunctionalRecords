@@ -71,20 +71,20 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 
 `Result` and `Result<T>` are `readonly record struct`s. Both can be success or failure.
 
-`Result` members:
+`Result` implements `IResult` members:
 - `bool IsSuccess` - true or false
 - `bool IsFailure` - opposite of `IsSuccess`
 - `IReadOnlyList<string> Errors` - error list, empty by default, cannot be null
 - `Maybe<Exception> Exception` - optional exception
 
-`Result<T>` members:
+`Result<T>` implements `Result<T>` members:
 - `bool IsSuccess` - true or false
 - `bool IsFailure` - opposite of `IsSuccess`
 - `IReadOnlyList<string> Errors` - error list, empty by default, cannot be null
 - `Maybe<Exception> Exception` - optional exception
 - `T Value` - balue of `T`
 
-`Result<T, TFailureType>` members:
+`Result<T, TFailureType>` implements IResult<T, TFailureType> members:
 - `bool IsSuccess` - true or false
 - `bool IsFailure` - opposite of `IsSuccess`
 - `IReadOnlyList<string> Errors` - error list, empty by default, cannot be null
@@ -122,6 +122,28 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 - `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, Exception exception, params string[] errors)`
 - `static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, Exception exception, IReadOnlyList<string> errors)`
 
+Interfaces:
+```csharp
+public interface IResult
+{
+    bool IsSuccess { get; }
+    bool IsFailure { get; }
+    IReadOnlyList<string> Errors { get; }
+    Maybe<Exception> Exception { get; }
+}
+
+public interface IResult<TValue> : IResult
+{
+    Maybe<TValue> Value { get; }
+}
+
+public interface IResult<TValue, TFailureType> : IResult<TValue> where TFailureType : Enum
+{
+    Maybe<TFailureType> FailureType { get; }
+}
+```
+
+Usage:
 ```csharp
 Result rSuccess = Result.Success();
 Result rFailure = Result.Failure();
@@ -356,3 +378,10 @@ Console output from previous code:
   ]
 }
 ```
+
+## Change History
+
+
+- 1.2.0 - added interfaces `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
+- 1.1.0 - added `Result<T, TFailureType>`
+- 1.0.0 - initial version
