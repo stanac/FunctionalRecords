@@ -6,6 +6,7 @@ public interface IResult
     bool IsFailure { get; }
     IReadOnlyList<string> Errors { get; }
     Maybe<Exception> Exception { get; }
+    void EnsureSuccess();
 }
 
 public interface IResult<TValue> : IResult

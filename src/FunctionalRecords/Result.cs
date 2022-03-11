@@ -112,6 +112,18 @@ public readonly record struct Result : IResult
     public static Result<TValue, TFailureType> Failure<TValue, TFailureType>(TFailureType failure, Exception exception, IReadOnlyList<string> errors)
         where TFailureType : Enum
         => new(false, default, errors ?? new List<string>(), exception, failure);
+
+    public void EnsureSuccess()
+    {
+        if (IsFailure)
+        {
+            string error = Errors.Any()
+                ? string.Join("; ", Errors)
+                : "Result is failure";
+
+            throw new OperationFailedException(error, Exception.ValueOrDefault);
+        }
+    }
 }
 
 public readonly record struct Result<TValue> : IResult<TValue>
@@ -140,6 +152,18 @@ public readonly record struct Result<TValue> : IResult<TValue>
     public IReadOnlyList<string> Errors { get; } = new List<string>();
     public Maybe<TValue> Value { get; } = Maybe<TValue>.None;
     public Maybe<Exception> Exception { get; } = Maybe<Exception>.None;
+
+    public void EnsureSuccess()
+    {
+        if (IsFailure)
+        {
+            string error = Errors.Any()
+                ? string.Join("; ", Errors)
+                : "Result is failure";
+
+            throw new OperationFailedException(error, Exception.ValueOrDefault);
+        }
+    }
 }
 
 public readonly record struct Result<TValue, TFailureType> : IResult<TValue, TFailureType> where TFailureType: Enum
@@ -183,5 +207,19 @@ public readonly record struct Result<TValue, TFailureType> : IResult<TValue, TFa
         }
 
         return false;
+    }
+
+    public void EnsureSuccess()
+    {
+        if (IsFailure)
+        {
+            string error = Errors.Any()
+                ? string.Join("; ", Errors)
+                : "Result is failure";
+
+            FailureType.Match(type => error = $"{type}: {error}");
+
+            throw new OperationFailedException(error, Exception.ValueOrDefault);
+        }
     }
 }

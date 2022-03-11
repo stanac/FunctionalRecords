@@ -5,7 +5,7 @@ namespace FunctionalRecords;
 [ExcludeFromCodeCoverage]
 public class ValidationException : Exception
 {
-    public IReadOnlyList<string> ValidationErrors { get; private set; } = new List<string>();
+    public IReadOnlyList<string> ValidationErrors { get; private set; }
     public string? OnTypeFullName { get; }
 
     public ValidationException(params string[] errors)
@@ -18,7 +18,7 @@ public class ValidationException : Exception
     {
     }
 
-    public ValidationException(List<string> errors)
+    public ValidationException(List<string>? errors)
         : base(GetErrorMessage(errors))
     {
         ValidationErrors = errors ?? new List<string>();
@@ -34,7 +34,7 @@ public class ValidationException : Exception
     {
     }
 
-    public ValidationException(Type onType, List<string> errors)
+    public ValidationException(Type? onType, List<string>? errors)
         : base(GetErrorMessage(onType, errors))
     {
         if (onType != null)
@@ -45,7 +45,7 @@ public class ValidationException : Exception
         ValidationErrors = errors ?? new List<string>();
     }
 
-    private static string GetErrorMessage(List<string> errors)
+    private static string GetErrorMessage(List<string>? errors)
     {
         if (errors == null || errors.Count == 0)
         {
@@ -60,7 +60,7 @@ public class ValidationException : Exception
         return $"Validation errors: {string.Join(";", errors)}";
     }
 
-    private static string GetErrorMessage(Type onType, List<string> errors)
+    private static string GetErrorMessage(Type? onType, List<string>? errors)
     {
         if (onType == null)
         {

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Xunit;
 
 namespace FunctionalRecords.Tests;
@@ -24,7 +25,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Result_Success_SetsSuccessToTrue_And_ErrorsToEmtpy_And_ExceptionToNone()
+    public void Result_Success_SetsSuccessToTrue_And_ErrorsToEmpty_And_ExceptionToNone()
     {
         Result r = Result.Success();
         r.IsSuccess.Should().BeTrue();
@@ -35,7 +36,23 @@ public class ResultTests
     }
 
     [Fact]
-    public void Result_FailureWithErrors_SetsIsFailureToTrue_And_ErrorsToEmtpy_And_ExceptionToNone()
+    public void Result_Success_EnsureValid_DoesNotThrow()
+    {
+        Result r = Result.Success();
+        Action a = () => r.EnsureSuccess();
+        a.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Result_Failure_EnsureValid_ThrowsException()
+    {
+        Result r = Result.Failure("abc");
+        Action a = () => r.EnsureSuccess();
+        a.Should().Throw<OperationFailedException>();
+    }
+
+    [Fact]
+    public void Result_FailureWithErrors_SetsIsFailureToTrue_And_ErrorsToEmpty_And_ExceptionToNone()
     {
         Result r = Result.Failure();
         r.IsSuccess.Should().BeFalse();
@@ -149,6 +166,22 @@ public class ResultTests
         r.Errors.Should().NotBeNull();
         r.Errors.Should().BeEmpty();
         r.Exception.IsNone.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void ResultT_Success_EnsureValid_DoesNotThrow()
+    {
+        Result<int> r = Result.Success(1);
+        Action a = () => r.EnsureSuccess();
+        a.Should().NotThrow();
+    }
+
+    [Fact]
+    public void ResultT_Failure_EnsureValid_ThrowsException()
+    {
+        Result<int> r = Result.Failure<int>("abc");
+        Action a = () => r.EnsureSuccess();
+        a.Should().Throw<OperationFailedException>();
     }
 
     [Fact]
@@ -271,6 +304,22 @@ public class ResultTests
         r.Exception.IsNone.Should().BeTrue();
     }
 
+    [Fact]
+    public void ResultTFailureFlag_Success_EnsureValid_DoesNotThrow()
+    {
+        Result<int, Failures> r = Result.Success<int, Failures>(1);
+        Action a = () => r.EnsureSuccess();
+        a.Should().NotThrow();
+    }
+
+    [Fact]
+    public void ResultTFailureFlag_Failure_EnsureValid_ThrowsException()
+    {
+        Result<int, Failures> r = Result.Failure<int, Failures>(Failures.F2);
+        Action a = () => r.EnsureSuccess();
+        a.Should().Throw<OperationFailedException>();
+    }
+    
     [Fact]
     public void ResultTValueTFailure_Failure_SetsValueToNone_And_AllOtherPropertiesToDefault()
     {
@@ -653,7 +702,7 @@ public class ResultTests
         r.Is(FailuresFlags.F2).Should().BeTrue();
         r.Is(FailuresFlags.F3).Should().BeFalse();
     }
-
+    
     private static IEnumerable<string> GetErrors()
     {
         yield return "a";

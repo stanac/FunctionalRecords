@@ -19,7 +19,7 @@ dotnet add package FunctionalRecords.Serialization.Json
 ```
 ℹ All examples are available in /examples directory
 ```
-
+---
 
 ### Maybe&lt;T&gt;
 
@@ -67,6 +67,8 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 
 ```
 
+---
+
 ### Result, Result&lt;T&gt; and Result&lt;T,TFailureType&gt;
 
 `Result` and `Result<T>` are `readonly record struct`s. Both can be success or failure.
@@ -76,6 +78,7 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 - `bool IsFailure` - opposite of `IsSuccess`
 - `IReadOnlyList<string> Errors` - error list, empty by default, cannot be null
 - `Maybe<Exception> Exception` - optional exception
+- `EnsureSuccess()` - throws exception in case of failure
 
 `Result<T>` implements `Result<T>` members:
 - `bool IsSuccess` - true or false
@@ -83,6 +86,7 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 - `IReadOnlyList<string> Errors` - error list, empty by default, cannot be null
 - `Maybe<Exception> Exception` - optional exception
 - `T Value` - balue of `T`
+- `EnsureSuccess()` - throws exception in case of failure
 
 `Result<T, TFailureType>` implements IResult<T, TFailureType> members:
 - `bool IsSuccess` - true or false
@@ -91,6 +95,7 @@ Console.WriteLine($"sLength (-1 if null): {sLength}");
 - `Maybe<Exception> Exception` - optional exception
 - `T Value` - balue of `T`
 -  Maybe<TFailureType> FailureType - optinal failure type
+- `EnsureSuccess()` - throws exception in case of failure
 
 `Result` methods:
 - `static Result Success()`
@@ -174,6 +179,8 @@ public enum FileFailures
     WrongFileExtension
 }
 ```
+
+---
 
 ### ValueRecord&lt;T&gt;
 
@@ -259,6 +266,8 @@ public record PersonName : ValueRecord<(string FirstName, string LastName)>
 
 ```
 
+---
+
 ### Choice&lt;T1, T2&gt;
 
 Records:
@@ -310,6 +319,8 @@ stringOrInt2.Match(
 Type t = stringOrInt2.GetChosenType(); // returns typeof(string)
 
 ```
+
+---
 
 ### Serialization
 
@@ -379,9 +390,11 @@ Console output from previous code:
 }
 ```
 
+---
+
 ## Change History
 
-
+- 1.3.0 - added method `EnsureSuccess()` on `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
 - 1.2.0 - added interfaces `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
 - 1.1.0 - added `Result<T, TFailureType>`
 - 1.0.0 - initial version
