@@ -558,6 +558,7 @@ public class ResultTests
         r.Exception.Value.Message.Should().Be(ErrorMessage);
         r.FailureType.IsSome.Should().BeTrue();
         r.FailureType.Value.Should().Be(Failures.F2);
+        r.Is(Failures.F1).Should().BeFalse();
         r.Is(Failures.F2).Should().BeTrue();
         r.Is(Failures.F3).Should().BeFalse();
     }
@@ -603,7 +604,7 @@ public class ResultTests
     [Fact]
     public void ResultTValueTFailureFlags_FailureWithFailureTypeWithIEnumerableErrors_SetsValueToNone_ErrorsToErrors_And_AllOtherPropertiesToDefault()
     {
-        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F2 | FailuresFlags.F1, GetErrors());
+        Result<int, FailuresFlags> r = Result.Failure<int, FailuresFlags>(FailuresFlags.F1 | FailuresFlags.F3, GetErrors());
 
         r.IsSuccess.Should().BeFalse();
         r.IsFailure.Should().BeTrue();
@@ -612,10 +613,10 @@ public class ResultTests
         r.Errors.Should().NotBeEmpty();
         r.Exception.IsNone.Should().BeTrue();
         r.FailureType.IsSome.Should().BeTrue();
-        r.FailureType.Value.Should().Be(FailuresFlags.F2 | FailuresFlags.F1);
+        r.FailureType.Value.Should().Be(FailuresFlags.F3 | FailuresFlags.F1);
         r.Is(FailuresFlags.F1).Should().BeTrue();
-        r.Is(FailuresFlags.F2).Should().BeTrue();
-        r.Is(FailuresFlags.F3).Should().BeFalse();
+        r.Is(FailuresFlags.F2).Should().BeFalse();
+        r.Is(FailuresFlags.F3).Should().BeTrue();
     }
 
     [Fact]

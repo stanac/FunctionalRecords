@@ -203,7 +203,12 @@ public readonly record struct Result<TValue, TFailureType> : IResult<TValue, TFa
             int setValue = (int) (object) FailureType.Value;
             int v = (int) (object) value;
 
-            return (setValue & v) == v;
+            if (typeof(TFailureType).IsDefined(typeof(FlagsAttribute), false))
+            {
+                return (setValue & v) == v;
+            }
+
+            return setValue == v;
         }
 
         return false;
