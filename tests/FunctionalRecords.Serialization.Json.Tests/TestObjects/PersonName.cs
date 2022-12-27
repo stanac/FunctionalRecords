@@ -1,5 +1,4 @@
-﻿using FunctionalRecords;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FunctionalRecords.Serialization.Json.Tests.TestObjects;
 

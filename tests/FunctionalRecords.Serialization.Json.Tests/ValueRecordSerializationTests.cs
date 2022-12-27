@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-using FunctionalRecords.Serialization.Json;
 using FunctionalRecords.Serialization.Json.Tests.TestObjects;
-using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;

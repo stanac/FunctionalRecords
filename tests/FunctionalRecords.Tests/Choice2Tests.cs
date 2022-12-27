@@ -1,7 +1,4 @@
 ﻿using FluentAssertions;
-using System;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace FunctionalRecords.Tests;
 
@@ -145,8 +142,7 @@ public class Choice2Tests
         Choice<int, string> c = 2;
         c.GetChosenType().Should().Be(typeof(int));
     }
-
-
+    
     [Fact]
     public void Choice2_SetToT2_GetChosenType_ReturnsCorrectType()
     {

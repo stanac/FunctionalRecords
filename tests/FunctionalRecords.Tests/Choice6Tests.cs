@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
-using System;
-using Xunit;
+// ReSharper disable RedundantDelegateCreation
 
 namespace FunctionalRecords.Tests;
 
@@ -521,5 +520,53 @@ public class Choice6Tests
         DateOnly date = DateOnly.FromDateTime(DateTime.Now);
         Choice<int, string, float, Guid, DateTime, DateOnly> c = date;
         c.Value.Should().Be(date);
+    }
+
+    [Fact]
+    public void Choice6_SetTo1_SelectedTypeName_ReturnsExpectedValue()
+    {
+        int value = 1;
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = value;
+        c.SelectedTypeName.Should().Be("Int32");
+    }
+
+    [Fact]
+    public void Choice6_SetTo2_SelectedTypeName_ReturnsExpectedValue()
+    {
+        string value = "123";
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = value;
+        c.SelectedTypeName.Should().Be("String");
+    }
+
+    [Fact]
+    public void Choice6_SetTo3_SelectedTypeName_ReturnsExpectedValue()
+    {
+        float value = 1.0f;
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = value;
+        c.SelectedTypeName.Should().Be("Single");
+    }
+
+    [Fact]
+    public void Choice6_SetTo4_SelectedTypeName_ReturnsExpectedValue()
+    {
+        Guid value = Guid.Empty;
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = value;
+        c.SelectedTypeName.Should().Be("Guid");
+    }
+
+    [Fact]
+    public void Choice6_SetTo5_SelectedTypeName_ReturnsExpectedValue()
+    {
+        DateTime date = DateTime.MinValue;
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = date;
+        c.SelectedTypeName.Should().Be("DateTime");
+    }
+
+    [Fact]
+    public void Choice6_SetTo6_SelectedTypeName_ReturnsExpectedValue()
+    {
+        DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+        Choice<int, string, float, Guid, DateTime, DateOnly> c = date;
+        c.SelectedTypeName.Should().Be("DateOnly");
     }
 }

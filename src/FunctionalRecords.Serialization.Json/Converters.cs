@@ -4,17 +4,12 @@ namespace FunctionalRecords.Serialization.Json;
 
 public static class Converters
 {
-    public static IReadOnlyList<JsonConverter> AllConverters
-    {
-        get
+    public static IReadOnlyList<JsonConverter> AllConverters =>
+        new List<JsonConverter>
         {
-            return new List<JsonConverter>
-            {
-                new MaybeConverterFactory(),
-                new ResultConverterFactory(),
-                new ValueTupleConverterFactory(),
-                new ChoiceConverterFactory()
-            };
-        }
-    }
+            new MaybeConverterFactory(),
+            new ResultConverterFactory(),
+            new ValueTupleConverterFactory(),
+            new ChoiceConverterFactory()
+        };
 }

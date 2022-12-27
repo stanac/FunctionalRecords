@@ -275,7 +275,7 @@ Records:
 - `Choice<T1, T2, T3>`
 - `Choice<T1, T2, T3, T4>`
 - `Choice<T1, T2, T3, T4, T5>`
-- `Choice<T1, T2, T3, T4, T5. T6>`
+- `Choice<T1, T2, T3, T4, T5, T6>`
 
 Choice records are `readonly record struct`s. They hold one of given values.
 
@@ -327,6 +327,8 @@ Type t = stringOrInt2.GetChosenType(); // returns typeof(string)
 Package `FunctionalRecords.Serialization.Json` needs to be referenced if (de)serialization of records is required.
 
 ```csharp
+using namespace FunctionalRecords.Serialization.Json;
+
 public static class SerializationExample
 {
     public class JsonTestObj
@@ -335,7 +337,7 @@ public static class SerializationExample
         public Maybe<int> MaybeInt1 { get; set; }
         public Maybe<int> MaybeInt2 { get; set; }
         public Result<Guid> Result { get; set; }
-        public Choice<string, int> Choice2 { get; set; }
+        public Choice<string, int> StringOrInt { get; set; }
     }
 
     public static void Example()
@@ -343,7 +345,7 @@ public static class SerializationExample
         JsonTestObj t = new JsonTestObj
         {
             PersonName = ("Jane", "Doe"),
-            Choice2 = "Somethig",
+            StringOrInt = "Somethig",
             Result = Result.Success(Guid.NewGuid()),
             MaybeInt1 = Maybe<int>.None,
             MaybeInt2 = -5548
@@ -351,10 +353,7 @@ public static class SerializationExample
 
         JsonSerializerOptions serializerOptions = new JsonSerializerOptions();
         serializerOptions.WriteIndented = true;
-        foreach (JsonConverter c in FunctionalRecords.Serialization.Json.Converters.AllConverters)
-        {
-            serializerOptions.Converters.Add(c);
-        }
+        serializerOptions.AddFunctionalRecordsConverters();
 
         string json = JsonSerializer.Serialize(t, serializerOptions);
         Console.WriteLine(json);
@@ -381,12 +380,12 @@ Console output from previous code:
     "IsSuccess": true,
     "Exception": null,
     "Errors": [],
-    "Value": "1f72f41b-484a-4001-82d0-6bf7d3f8f571"
+    "Value": "c8b7466e-2260-4bc9-b2e9-b26122ee9dd8"
   },
-  "Choice2": [
-    1,
-    "Somethig"
-  ]
+  "StringOrInt": {
+    "$choiceType": "String",
+    "value": "Somethig"
+  }
 }
 ```
 
@@ -394,6 +393,7 @@ Console output from previous code:
 
 ## Change History
 
+- 1.4.0 - changed serialization of `Choice` so it's serialized as object (change is backward compatible)
 - 1.3.0 - added method `EnsureSuccess()` on `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
 - 1.2.0 - added interfaces `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
 - 1.1.0 - added `Result<T, TFailureType>`

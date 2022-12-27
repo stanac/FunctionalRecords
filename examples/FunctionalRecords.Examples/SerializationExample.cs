@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using FunctionalRecords.Serialization.Json;
 
 namespace FunctionalRecords.Examples;
 
@@ -11,7 +12,7 @@ public static class SerializationExample
         public Maybe<int> MaybeInt1 { get; set; }
         public Maybe<int> MaybeInt2 { get; set; }
         public Result<Guid> Result { get; set; }
-        public Choice<string, int> Choice2 { get; set; }
+        public Choice<string, int> StringOrInt { get; set; }
     }
 
     public static void Example()
@@ -19,7 +20,7 @@ public static class SerializationExample
         JsonTestObj t = new JsonTestObj
         {
             PersonName = ("Jane", "Doe"),
-            Choice2 = "Somethig",
+            StringOrInt = "Somethig",
             Result = Result.Success(Guid.NewGuid()),
             MaybeInt1 = Maybe<int>.None,
             MaybeInt2 = -5548
@@ -27,10 +28,7 @@ public static class SerializationExample
 
         JsonSerializerOptions serializerOptions = new JsonSerializerOptions();
         serializerOptions.WriteIndented = true;
-        foreach (JsonConverter c in FunctionalRecords.Serialization.Json.Converters.AllConverters)
-        {
-            serializerOptions.Converters.Add(c);
-        }
+        serializerOptions.AddFunctionalRecordsConverters();
 
         string json = JsonSerializer.Serialize(t, serializerOptions);
         Console.WriteLine(json);

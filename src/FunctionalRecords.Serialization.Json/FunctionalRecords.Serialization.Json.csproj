@@ -4,12 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Description>JsonConverters for FunctionalRecords</Description>
+	<IncludeSymbols>true</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<Description>JsonConverters for FunctionalRecords</Description>
     <PackageProjectUrl>https://github.com/stanac/FunctionalRecords</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stanac/FunctionalRecords</RepositoryUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.3.1</Version>
+    <Version>1.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

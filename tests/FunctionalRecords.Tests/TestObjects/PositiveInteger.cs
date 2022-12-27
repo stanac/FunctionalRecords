@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FunctionalRecords.Tests.TestObjects;
+﻿namespace FunctionalRecords.Tests.TestObjects;
 
 public record PositiveInteger : ValueRecord<int>
 {

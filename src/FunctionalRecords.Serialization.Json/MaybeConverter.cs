@@ -1,5 +1,4 @@
-﻿using FunctionalRecords;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace FunctionalRecords.Serialization.Json;
