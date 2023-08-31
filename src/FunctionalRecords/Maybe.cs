@@ -1,6 +1,6 @@
 ﻿namespace FunctionalRecords;
 
-public readonly record struct Maybe<T>
+public readonly record struct Maybe<T> : IMaybe
 {
     private readonly bool _setToNull = false;
     private readonly T? _value = default;

@@ -1,6 +1,6 @@
 ﻿# FunctionalRecords
 
-C# library with functional records: Maybe, Choice, ValueRecord (value object), Result
+C# library (.NET 6, 7+) with functional records: Maybe, Choice, ValueRecord (value object), Result
 
 ## Install from nuget
 
@@ -65,6 +65,16 @@ int sLength = s.Match(
 
 Console.WriteLine($"sLength (-1 if null): {sLength}");
 
+```
+
+`Maybe<T>` is implementing (sinve v1.5)
+
+```
+public interface IMaybe
+{
+    bool IsSome { get; }
+    bool IsNone { get; }
+}
 ```
 
 ---
@@ -393,6 +403,7 @@ Console output from previous code:
 
 ## Change History
 
+- 1.5.0 - added `IMaybe` inherited by `Maybe<T>`, added .NET 7 as one of the target frameworks
 - 1.4.0 - changed serialization of `Choice` so it's serialized as object (change is backward compatible)
 - 1.3.0 - added method `EnsureSuccess()` on `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
 - 1.2.0 - added interfaces `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
