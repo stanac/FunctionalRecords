@@ -117,6 +117,11 @@ public readonly record struct Result : IResult
     {
         if (IsFailure)
         {
+            if (Exception.IsSome)
+            {
+                throw Exception.Value;
+            }
+
             string error = Errors.Any()
                 ? string.Join("; ", Errors)
                 : "Result is failure";

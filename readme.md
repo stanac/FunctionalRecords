@@ -1,6 +1,6 @@
 ﻿# FunctionalRecords
 
-C# library (.NET 6, 7+) with functional records: Maybe, Choice, ValueRecord (value object), Result
+C# library (.NET 6, 7, 8+) with functional records: Maybe, Choice, ValueRecord (value object), Result
 
 ## Install from nuget
 
@@ -107,7 +107,7 @@ public interface IMaybe
 -  Maybe<TFailureType> FailureType - optinal failure type
 - `EnsureSuccess()` - throws exception in case of failure
 
-`Result` methods:
+`Result` static methods:
 - `static Result Success()`
 - `static Result<TValue> Success<TValue>(TValue value)`
 - `static Result<TValue, TFailureType> Success<TValue, TFailureType>(TValue value)`
@@ -145,6 +145,7 @@ public interface IResult
     bool IsFailure { get; }
     IReadOnlyList<string> Errors { get; }
     Maybe<Exception> Exception { get; }
+    void EnsureSuccess();
 }
 
 public interface IResult<TValue> : IResult
@@ -403,6 +404,7 @@ Console output from previous code:
 
 ## Change History
 
+- 1.6.0 - added check for throwing `Exception` from `IResult` when `EnsureSuccess` is called, added .NET 8 as one of the target frameworks
 - 1.5.0 - added `IMaybe` inherited by `Maybe<T>`, added .NET 7 as one of the target frameworks
 - 1.4.0 - changed serialization of `Choice` so it's serialized as object (change is backward compatible)
 - 1.3.0 - added method `EnsureSuccess()` on `IResult`, `IResult<T>` and `IResult<T, TFailureType>`
